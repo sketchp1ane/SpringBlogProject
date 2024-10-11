@@ -1,0 +1,41 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.5'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.javaweb'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring Data JPA for database interactions
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// Spring Web for building web applications
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// Spring Security for authentication and authorization
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// BCrypt Password Encoder for secure password handling
+	implementation 'org.springframework.security:spring-security-crypto'
+
+	// MySQL connector for database
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// Testing dependencies
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

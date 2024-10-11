@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>javaweb期末作业 - 注册</title>
+   <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+   <style>
+      .nav-item {
+         border: 2px solid rgba(255, 255, 255, 0);
+         border-radius: 10px;
+         transition: border 0.3s, transform 0.3s;
+      }
+
+      .nav-item:hover {
+         border: 2px solid rgba(255, 255, 255, 100);
+         border-radius: 10px;
+         transform: scale(1.2);
+      }
+
+      .navbar-brand {
+         transition: transform 0.3s;
+      }
+
+      .navbar-brand:hover {
+         transform: scale(2);
+      }
+   </style>
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg bg-primary" style="z-index: 1;">
+   <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">
+         <img src="images/schoolLogo.jpg" width="30" height="30" style="border-radius: 50%;">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">首页</a></li>
+            <li class="nav-item"><a class="nav-link" href="author.html">作者介绍</a></li>
+            <li class="nav-item"><a class="nav-link" href="forum.html">留言板</a></li>
+            <li class="nav-item"><a class="nav-link" href="query.html">查询</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html">登录</a></li>
+            <li class="nav-item"><a class="nav-link" href="account_set.html">账号管理</a></li>
+         </ul>
+         <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-dark" type="submit">Search</button>
+         </form>
+      </div>
+   </div>
+</nav>
+
+<!-- 注册表单 -->
+<div class="container mt-5 mb-4">
+   <div class="row justify-content-center">
+      <div class="col-md-6">
+         <div class="card">
+            <div class="card-body">
+               <h1 class="card-title text-center mb-4">注册</h1>
+               <form id="signupForm">
+                  <div class="mb-3">
+                     <label for="inputEmail" class="form-label">邮箱地址</label>
+                     <input type="email" class="form-control" id="inputEmail" placeholder="请输入您的邮箱地址" required>
+                  </div>
+                  <div class="mb-3">
+                     <label for="inputPassword" class="form-label">密码</label>
+                     <input type="password" class="form-control" id="inputPassword" placeholder="请输入您的密码" required>
+                  </div>
+                  <div class="mb-3">
+                     <label for="roleSelect" class="form-label">选择身份</label>
+                     <select class="form-select" id="roleSelect" required>
+                        <option value="USER" selected>普通用户</option>
+                        <option value="ADMIN">管理员</option>
+                     </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary">注册</button>
+                  <div id="errorAlert" class="alert alert-danger mt-3" role="alert" style="display: none;">
+                     注册失败，请重试。
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+   document.getElementById('signupForm').addEventListener('submit', function (event) {
+      event.preventDefault(); // 阻止默认的表单提交
+
+      const formData = {
+         email: document.getElementById('inputEmail').value,
+         password: document.getElementById('inputPassword').value,
+         role: document.getElementById('roleSelect').value  // 获取选择的角色
+      };
+
+      fetch('/api/user/register', {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json'
+         },
+         body: JSON.stringify(formData)
+      })
+              .then(response => {
+                 if (response.ok) {
+                    window.location.href = '/login.html'; // 成功后跳转到登录页面
+                 } else {
+                    document.getElementById('errorAlert').style.display = 'block'; // 显示错误信息
+                 }
+              })
+              .catch(error => {
+                 document.getElementById('errorAlert').style.display = 'block'; // 显示错误信息
+              });
+   });
+</script>
+
+<footer class="footer mt-auto py-3 bg-light d-flex justify-content-center">
+   <span class="text-muted">班级：22计算机4班    学号：2200203312    姓名：陈翰</span>
+</footer>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

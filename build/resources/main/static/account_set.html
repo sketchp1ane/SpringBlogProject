@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>javaweb期末作业</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <!-- Bootstrap JavaScript (optional) -->
+  <style>
+    .nav-item {
+      border: 2px solid rgba(255, 255, 255, 0);
+      border-radius: 10px;
+      transition: border 0.3s, transform 0.3s;
+    }
+    .nav-item:hover {
+      border: 2px solid rgba(255, 255, 255, 100);
+      border-radius: 10px;
+      transform: scale(1.2);
+    }
+    .navbar-brand {
+      transition: transform 0.3s;
+    }
+    .navbar-brand:hover {
+      transform: scale(2);
+    }
+  </style>
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg bg-primary" style="z-index: 1;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.html">
+      <img src="images/schoolLogo.jpg" width="30" height="30" style="border-radius: 50%;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">首页</a></li>
+        <li class="nav-item"><a class="nav-link" href="author.html">作者介绍</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            家乡介绍
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="homeland.html#homeland_food">家乡美食</a></li>
+            <li><a class="dropdown-item" href="homeland.html#homeland_sight">家乡景点</a></li>
+            <li><a class="dropdown-item" href="homeland.html#homeland_culture">家乡文化</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="forum.html">留言板</a></li>
+        <li class="nav-item"><a class="nav-link" href="query.html">查询</a></li>
+        <li class="nav-item"><a class="nav-link" href="login.html">登录</a></li>
+        <li class="nav-item"><a class="nav-link" href="account_set.html">账号管理</a></li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-dark" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<!-- 账号管理内容 -->
+<div class="container mt-5">
+  <h1 class="text-center mb-4">账号管理</h1>
+  <form id="emailForm">
+    <div class="mb-3">
+      <label for="inputEmail" class="form-label">邮箱</label>
+      <input type="email" class="form-control" id="inputEmail" placeholder="请输入您要找的邮箱">
+    </div>
+    <button type="submit" class="btn btn-primary">
+      <i class="bi bi-search"></i> 查询账号
+    </button>
+  </form>
+
+  <hr>
+
+  <button id="getAllUsersBtn" class="btn btn-secondary mt-3">返回所有用户</button>
+
+  <h2 class="mt-4">查询结果</h2>
+  <div id="account" class="mt-3">
+    <!-- 动态插入账号 -->
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 检查用户角色，如果不是管理员则弹出提示并重定向
+    fetch('/api/user/role')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('无法获取角色信息');
+              }
+              return response.text();  // 返回角色作为纯文本
+            })
+            .then(role => {
+              console.log('当前用户角色:', role);  // 输出角色，方便调试
+              if (role !== 'ROLE_ADMIN') {
+                alert('您不是管理员，无法访问此页面');
+                window.location.href = '/login.html';  // 如果不是管理员，重定向到登录页
+              }
+            })
+            .catch(error => {
+              console.error('无法验证用户角色:', error);
+              alert('无法验证用户角色，请重新登录');
+              window.location.href = '/login.html';  // 出错时重定向到登录页
+            });
+  });
+
+  // 查询单个账号
+  document.getElementById('emailForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const email = document.getElementById('inputEmail').value;
+    fetch(`/api/user?email=${encodeURIComponent(email)}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data) {
+                displayUser(data);
+              } else {
+                document.getElementById('account').innerHTML = '<p>未找到账号。</p>';
+              }
+            })
+            .catch(error => console.error('Error:', error));
+  });
+
+  // 返回所有用户
+  document.getElementById('getAllUsersBtn').addEventListener('click', function() {
+    fetch('/api/user/users')
+            .then(response => response.json())
+            .then(users => {
+              displayUsers(users);
+            })
+            .catch(error => console.error('获取用户时出错:', error));
+  });
+
+  // 显示单个用户信息
+  function displayUser(user) {
+    const accountDiv = document.getElementById('account');
+    accountDiv.innerHTML = `
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">账号信息</h5>
+          <p class="card-text">邮箱: ${user.email}</p>
+          <p class="card-text">角色: ${user.role}</p>
+          <p class="card-text">ID: ${user.id}</p>
+          <button class="btn btn-warning me-2" onclick="editUser('${user.email}')">修改</button>
+          <button class="btn btn-danger" onclick="deleteUser('${user.email}')">删除</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // 显示所有用户信息
+  function displayUsers(users) {
+    const accountDiv = document.getElementById('account');
+    accountDiv.innerHTML = '';  // 清空之前的内容
+    if (users.length === 0) {
+      accountDiv.innerHTML = '<p>没有找到用户。</p>';
+    } else {
+      users.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.classList.add('card', 'mt-3');
+        userDiv.innerHTML = `
+        <div class="card-body">
+          <h5 class="card-title">用户信息</h5>
+          <p class="card-text">邮箱: ${user.email}</p>
+          <p class="card-text">角色: ${user.role}</p>
+          <p class="card-text">ID: ${user.id}</p>
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-warning me-2" onclick="editUser('${user.email}')">修改</button>
+            <button class="btn btn-danger" onclick="deleteUser('${user.email}')">删除</button>
+          </div>
+        </div>
+      `;
+        accountDiv.appendChild(userDiv);
+      });
+    }
+  }
+
+  // 修改用户密码
+  function editUser(email) {
+    const newPassword = prompt('请输入新的密码:');
+    if (newPassword) {
+      fetch(`/api/user`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: newPassword }),
+      })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  alert('修改成功');
+                  displayUser(data.user);
+                } else {
+                  alert('修改失败');
+                }
+              })
+              .catch(error => console.error('Error:', error));
+    }
+  }
+
+  // 删除用户
+  function deleteUser(email) {
+    if (confirm('确定要删除这个账号吗？')) {
+      fetch(`/api/user?email=${encodeURIComponent(email)}`, { method: 'DELETE' })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  alert('删除成功');
+                  document.getElementById('account').innerHTML = '';
+                } else {
+                  alert('删除失败');
+                }
+              })
+              .catch(error => console.error('Error:', error));
+    }
+  }
+</script>
+
+<footer class="footer mt-auto py-3 bg-light d-flex justify-content-center">
+  <span class="text-muted">班级：22计算机4班    学号：2200203312    姓名：陈翰</span>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

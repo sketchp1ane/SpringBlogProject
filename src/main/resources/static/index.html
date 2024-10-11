@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>javaweb期末作业</title>
+      <!-- Bootstrap CSS -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+      <!-- Bootstrap JavaScript (optional) -->
+      <style>
+         .carousel-item img {
+         width: 500px; /* 设置图片宽度 */
+         height: 300px; /* 设置图片高度 */
+         }
+         .nav-item {
+         border: 2px solid rgba(255, 255, 255, 0);
+         border-radius: 10px;
+         transition: border 0.3s, transform 0.3s;
+         }
+         .nav-item:hover {
+         border: 2px solid rgba(255, 255, 255, 100);
+         border-radius: 10px;
+         transform: scale(1.2);
+         }
+
+         .navbar-brand {
+            transition: transform 0.3s;
+         }
+
+         .navbar-brand:hover {
+            transform: scale(2);
+         }
+      </style>
+   </head>
+   <body>
+      <!-- 导航栏 -->
+      <nav class="navbar navbar-expand-lg bg-primary" style="z-index: 1;">
+         <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+            <img src="images/schoolLogo.jpg" width="30" height="30" style="border-radius: 50%;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                     <a class="nav-link active" aria-current="page" href="index.html">首页</a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="author.html">作者介绍</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                     家乡介绍
+                     </a>
+                     <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="homeland.html#homeland_food">家乡美食</a></li>
+                      <li><a class="dropdown-item" href="homeland.html#homeland_sight">家乡景点</a></li>
+                      <li><a class="dropdown-item" href="homeland.html#homeland_culture">家乡文化</a></li>
+                     </ul>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="forum.html">留言板</a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="query.html">查询</a>
+                  </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="login.html">登录</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="account_set.html">账号管理</a>
+                   </li>
+               </ul>
+               <form class="d-flex" role="search">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-dark" type="submit">Search</button>
+               </form>
+            </div>
+         </div>
+      </nav>
+      <!-- 轮播图 -->
+      <div id="carouselExampleIndicators" class="carousel slide" style="z-index: 0;";>
+         <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+         </div>
+         <div class="carousel-inner">
+            <div class="carousel-item active">
+               <img src="images/cnjiliang.jpeg" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+               <img src="images/javawebdev.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+               <img src="images/logeWithName.jpg" class="d-block w-100" alt="...">
+            </div>
+         </div>
+         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+         <span class="visually-hidden">Previous</span>
+         </button>
+         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+         <span class="carousel-control-next-icon" aria-hidden="true"></span>
+         <span class="visually-hidden">Next</span>
+         </button>
+      </div>
+      <!-- 主要内容 -->
+      <br>
+      <br>
+      <figure class="text-center">
+        <blockquote class="blockquote">
+          <h2>基于Java的Web开发期末大作业</h2>
+        </blockquote>
+        <figcaption class="blockquote-footer">
+          陈翰 in <cite title="Source Title">22计算机4班</cite>
+        </figcaption>
+      </figure>
+      <div class="row row-cols-1 row-cols-md-3 p-5">
+        <div class="col">
+          <div class="card h-100">
+            <img src="images/homeland_sight.jpeg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">温州</h5>
+              <p class="card-text">温州市，浙江省辖地级市，东濒东海，南毗福建省宁德市，西及西北部与丽水市相连，北和东北部与台州市接壤。</p>
+            </div>
+            
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100">
+            <img src="images/homeland_food1.jpeg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">温州美食</h5>
+              <p class="card-text">温州菜又称“瓯菜”，以擅烹海鲜闻名，菜品口味清鲜，淡而不薄，著名菜肴有三丝敲鱼、爆墨鱼花、锦绣鱼丝、马铃黄鱼、双味梭子蟹、纲油黄鱼、炸溜黄鱼，蒜子鱼皮等。</p>
+            </div>
+            
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100">
+            <img src="images/messageBoard.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">留言板</h5>
+              <p class="card-text">大家有什么话想对我说吗，随便说说！！大家有什么话想对我说吗，随便说说！！大家有什么话想对我说吗，随便说说！！</p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <footer class="footer mt-auto py-3 bg-light d-flex justify-content-center">
+         <span class="text-muted">班级：22计算机4班    学号：2200203312    姓名：陈翰</span>
+      </footer>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+   </body>
+</html>
