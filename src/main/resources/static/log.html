@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日志展示 - Java Web 期末作业</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .loading, .error {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Java Web 作业</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.html">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="author.html">作者介绍</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="forum.html">留言板</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="query.html">查询</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="log.html">日志</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 日志展示表格 -->
+<div class="container mt-4">
+    <h2 class="text-center">消息日志</h2>
+    <div class="loading">日志加载中，请稍候...</div>
+    <div class="error" style="display: none;">加载日志时出错，请稍后再试。</div>
+    <table id="logTable" class="table table-striped" style="display:none;">
+        <thead>
+        <tr>
+            <th>Log ID</th>
+            <th>Message ID</th>
+            <th>Old Content</th>
+            <th>New Content</th>
+            <th>Operation Type</th>
+            <th>Change Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 日志数据将会动态插入到这里 -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Footer -->
+<footer class="footer mt-auto py-3 bg-light d-flex justify-content-center">
+    <span class="text-muted">班级：22计算机4班 学号：2200203312 姓名：陈翰</span>
+</footer>
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    // Fetch the log data from the backend API
+    fetch('/api/logs')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Debugging: 查看获取到的数据结构
+            const logTableBody = document.querySelector('#logTable tbody');
+            const logTable = document.querySelector('#logTable');
+            const loadingMessage = document.querySelector('.loading');
+            const errorMessage = document.querySelector('.error');
+
+            // 移除加载提示
+            loadingMessage.style.display = 'none';
+
+            // 如果有数据，显示表格
+            if (data.length > 0) {
+                logTable.style.display = 'table';
+            }
+
+            // 遍历数据并插入表格
+            data.forEach(log => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${log.logId !== null && log.logId !== undefined ? log.logId : 'N/A'}</td>
+                    <td>${log.messageId !== null && log.messageId !== undefined ? log.messageId : 'N/A'}</td>
+                    <td>${log.oldContent !== null && log.oldContent !== undefined ? log.oldContent : 'N/A'}</td>
+                    <td>${log.newContent !== null && log.newContent !== undefined ? log.newContent : 'N/A'}</td>
+                    <td>${log.operationType !== null && log.operationType !== undefined ? log.operationType : 'N/A'}</td>
+                    <td>${log.changeTime !== null && log.changeTime !== undefined ? log.changeTime : 'N/A'}</td>
+                `;
+                logTableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Fetch operation failed:', error); // 显示错误信息
+            document.querySelector('.loading').style.display = 'none';
+            document.querySelector('.error').style.display = 'block';
+        });
+</script>
+</body>
+</html>
